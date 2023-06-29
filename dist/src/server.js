@@ -16,13 +16,16 @@ const productsRouter_1 = require("../routes/productsRouter");
 const errorHandler_1 = require("../middlewares/errorHandler");
 const app = (0, express_1.default)();
 app.use((0, cookie_parser_1.default)());
-app.use((0, morgan_1.default)("dev"));
+app.use((0, morgan_1.default)('dev'));
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(enums_1.UsersPath.ROOT, userRoutes_1.userRouter);
 app.use(enums_1.ProductsPath.ROOT, productsRouter_1.productsRouter);
 app.use(errorHandler_1.apiErrorHandler);
 const port = process.env.PORT || 5000;
+app.get('/', (req, res) => {
+    res.send('Hello World');
+});
 function startApp() {
     app.listen(port, () => {
         (0, db_1.connectDb)().then(() => {
