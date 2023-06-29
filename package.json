@@ -8,7 +8,7 @@
     "watch": "tsc -w",
     "dev": "nodemon -L dist/src/server.js",
     "prod": "node dist/src/server.js",
-    "build": "tsc && cp .env /dist"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
