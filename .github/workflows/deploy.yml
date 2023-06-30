@@ -38,3 +38,5 @@ jobs:
         run: npm ci
       - name: Build Project
         run: npm run build
+      - name: Create new Image
+        run: docker build -t huy-api .
