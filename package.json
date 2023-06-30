@@ -10,6 +10,7 @@
     "dev": "nodemon -L dist/src/server.js",
     "prod": "node dist/src/server.js",
     "build": "tsc",
+    "dcr-run": "docker run -d -p 5000:5000 --rm icerock10/huy-api:main-4f041ee",
     "dcr-build": "docker build -t aroma-api .",
     "dcr-login": "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 796805497988.dkr.ecr.us-east-1.amazonaws.com/aroma-api",
     "dcr-push": "docker push 796805497988.dkr.ecr.us-east-1.amazonaws.com/aroma-api:latest",

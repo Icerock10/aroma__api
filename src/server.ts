@@ -21,7 +21,7 @@ app.use(ProductsPath.ROOT, productsRouter);
 
 const port: string | number = process.env.PORT || 5000;
 app.get('/', (req, res, next) => {
-  res.send('ALICE ALICE ALICE!')
+  res.send('MAXIMKA MAXIMKA MAXIMKA!')
   next()
 });
 app.use(apiErrorHandler);
