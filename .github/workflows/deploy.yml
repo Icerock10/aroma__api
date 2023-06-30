@@ -40,9 +40,9 @@ jobs:
         run: npm run build
       - name: Deploy to AWS
         run: |
-            npm dcr-build
-            npm dcr-login
-            npm dcr-tag
-            npm dcr-push
-            npm dcr-update
+            npm run dcr-build
+            npm run dcr-login
+            npm run dcr-tag
+            npm run dcr-push
+            npm run dcr-update
             
