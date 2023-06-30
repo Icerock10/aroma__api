@@ -48,7 +48,7 @@ jobs:
       - name: Build and Push Docker Image
         uses: mr-smithers-excellent/docker-build-push@v4
         with:
-          image: icerock10/huy-api:latest
+          image: icerock10/huy-api
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
