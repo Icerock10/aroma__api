@@ -18,10 +18,8 @@ app.use(express.json());
 app.use(UsersPath.ROOT, userRouter);
 app.use(ProductsPath.ROOT, productsRouter);
 app.use(apiErrorHandler);
+
 const port: string | number = process.env.PORT || 5000;
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
 
 function startApp() {
   app.listen(port, () => {
