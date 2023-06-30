@@ -1,8 +1,10 @@
-FROM node:latest
+FROM node:16.15 as base
 
-WORKDIR /aroma
+RUN mkdir -p /aroma/app
 
-COPY package.json .
+COPY . /aroma/app
+
+WORKDIR /aroma/app
 
 RUN npm install
 
@@ -10,6 +12,6 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "prod"]
 
 

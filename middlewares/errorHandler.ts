@@ -1,6 +1,6 @@
 import { ErrorService } from '../services/error/error.service';
 
-function apiErrorHandler(err, req, res) {
+function apiErrorHandler(err, req, res, next) {
   if (err instanceof ErrorService) {
     res.status(err.code).json({ message: err.message });
     return;

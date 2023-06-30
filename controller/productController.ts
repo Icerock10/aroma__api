@@ -92,7 +92,8 @@ class Product {
     res.json(productWithImage);
   });
   getManyById = asyncHandler(async (req, res, next): Promise<void> => {
-    const products = await Products.find({}).where('_id').in(req.body).exec();
+    const ids = req.body;
+    const products = await Products.find({}).where('_id').in(ids).exec();
     if (!products.length) return next(ErrorService.internalErr('Products were not found...'));
     const productsWithUrls = await S3Service._getImages(products);
     res.json(productsWithUrls);
