@@ -40,8 +40,6 @@ jobs:
         run: npm run build
       - name: Create new Image
         run: docker build -t huy-api .
-      - name: Tag Image
-        run: docker tag huy-api:latest
 
   dockerPush:
     runs-on: ubuntu-latest
