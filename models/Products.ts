@@ -1,6 +1,8 @@
-import { model, Schema } from "mongoose";
+import { model, Schema } from 'mongoose';
+import { PRODUCT_SCHEMA_NAME } from '../common/constants/constants';
+import { Product } from '../common/interfaces/interfaces';
 
-const productSchema = new Schema({
+const productSchema = new Schema<Product>({
   imageName: {
     type: String,
     required: true,
@@ -33,14 +35,11 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  burnTime: {
-    type: Number,
-    required: true,
-  },
   indication: {
     type: String,
     required: true,
   },
+  burnTime: Number
 });
 
-export const Products = model("Products", productSchema);
+export const Products = model<Product>(PRODUCT_SCHEMA_NAME, productSchema);

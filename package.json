@@ -8,13 +8,7 @@
     "lint": "eslint src/**/*.ts",
     "dev": "tsx watch src/server.ts",
     "prod": "node dist/src/server.js",
-    "build": "rimraf /dist && npx tsc",
-    "dcr-run-dev": "docker run -d -p 5000:5000 --rm icerock10/huy-api:main-4f041ee",
-    "dcr-build": "docker build -t aroma-api .",
-    "dcr-login": "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 796805497988.dkr.ecr.us-east-1.amazonaws.com/aroma-api",
-    "dcr-tag": "docker tag aroma-api:latest 796805497988.dkr.ecr.us-east-1.amazonaws.com/aroma-api:latest",
-    "dcr-push": "docker push 796805497988.dkr.ecr.us-east-1.amazonaws.com/aroma-api:latest",
-    "dcr-update": "aws ecs update-service --cluster aroma-api-ecs --service aroma-service --force-new-deployment --region us-east-1"
+    "build": "rimraf /dist && npx tsc"
   },
   "keywords": [],
   "author": "",

@@ -1,16 +1,15 @@
 import express from "express";
-import multer from "multer";
+import { multerUploadToStorage } from './helpers/create-multer-storage';
 import userController from "../controller/userController";
-import { UsersPath } from "../common/enums";
+import { SINGLE_IMAGE } from '../common/constants/constants';
+import { UserRoutes } from '../common/enums/user-routes-enums';
 import { verifyJWT } from "../middlewares/verifyJWT";
 export const userRouter = express.Router();
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
 
-userRouter.route(UsersPath.CREATE).post(userController.createUser);
-userRouter.route(UsersPath.LOGIN).post(userController.login);
-userRouter.route(UsersPath.TOKEN_REFRESH).get(userController.refresh);
-userRouter.route(UsersPath.DASHBOARD).get(verifyJWT, userController.dashboard);
-userRouter.route(UsersPath.UPLOAD_AVATAR).post(upload.single("image"), userController.uploadAvatar);
-userRouter.route(UsersPath.UPDATE_ONE).put(userController.updateOne);
+userRouter.route(UserRoutes.CREATE).post(userController.createUser);
+userRouter.route(UserRoutes.LOGIN).post(userController.login);
+userRouter.route(UserRoutes.TOKEN_REFRESH).get(userController.refresh);
+userRouter.route(UserRoutes.DASHBOARD).get(verifyJWT, userController.dashboard);
+userRouter.route(UserRoutes.UPLOAD_AVATAR).post(multerUploadToStorage.single(SINGLE_IMAGE), userController.uploadAvatar);
+userRouter.route(UserRoutes.UPDATE_ONE).put(userController.updateOne);

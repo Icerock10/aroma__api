@@ -1,7 +1,10 @@
 import { config } from 'dotenv';
 config();
 import express from 'express';
-import { UsersPath, ProductsPath } from '../common/enums';
+import { UserRoutes } from '../common/enums/user-routes-enums';
+import { ProductRoutes } from '../common/enums/product-routes-enums';
+import { CommonMessages } from '../common/enums/common-express-enums';
+import { MorganModes } from '../common/enums/morgan-middleware-enums';
 import morgan from 'morgan';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -11,24 +14,20 @@ import { productsRouter } from '../routes/productsRouter';
 import { apiErrorHandler } from '../middlewares/errorHandler';
 
 const app = express();
+const port: number = parseInt(process.env.PORT) || 5000;
+
 app.use(cookieParser());
-app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
-app.use(UsersPath.ROOT, userRouter);
-app.use(ProductsPath.ROOT, productsRouter);
-
-
-const port: number = parseInt(process.env.PORT) || 5000;
-app.get('/', (req, res, next) => {
-  res.send('ALICE ALICE!')
-  next()
-});
+app.use(UserRoutes.USERS, userRouter);
+app.use(ProductRoutes.PRODUCTS, productsRouter);
+app.use(morgan(MorganModes.DEV));
 app.use(apiErrorHandler);
+
 function startApp() {
   app.listen(port, () => {
     connectDb().then(() => {
-      console.log(`Express is listening at http://localhost:${port}`);
+      console.log(`${CommonMessages.SERVER_STARTED}${port}`);
     });
   });
 }
