@@ -19,9 +19,9 @@ app.use(UsersPath.ROOT, userRouter);
 app.use(ProductsPath.ROOT, productsRouter);
 
 
-const port: string | number = process.env.PORT || 5000;
+const port: number = parseInt(process.env.PORT) || 5000;
 app.get('/', (req, res, next) => {
-  res.send('MAXIMKA MAXIMKA MAXIMKA!')
+  res.send('ALICE ALICE!')
   next()
 });
 app.use(apiErrorHandler);
