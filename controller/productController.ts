@@ -12,12 +12,12 @@ import { DATABASE_ID_PATH } from '../common/constants/constants';
 class productController {
   upload = asyncHandler(async (req: CustomRequest, res: Response, next: NextFunction) => {
     if (!req.file || !req.body)
-      next(ErrorService.badRequestErr(ResponseMessage.FILE_OR_PRODUCT_NOT_UPLOADED));
+      return next(ErrorService.badRequestErr(ResponseMessage.FILE_OR_PRODUCT_NOT_UPLOADED));
     const { category, title, subTitle, description, price, productProfile, burnTime, indication } =
       req.body;
     const { originalname, mimetype, buffer } = req.file;
 
-    const isDuplicate: Product = await Products.findOne({ imageName: originalname });
+    const isDuplicate = await Products.findOne({ imageName: originalname });
     if (isDuplicate) return next(ErrorService.badRequestErr(ResponseMessage.IMAGE_ALREADY_EXISTS));
 
     await S3Service._upload(originalname, buffer, mimetype);

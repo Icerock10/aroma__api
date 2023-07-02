@@ -14,6 +14,5 @@ export enum ResponseMessage {
   FILE_OR_PRODUCT_NOT_UPLOADED = 'File or Product information is missing',
   IMAGE_ALREADY_EXISTS = 'This image already exists..',
   PRODUCT_CATEGORY_INVALID = 'Product category is invalid..',
-  PAGES_ARE_OVER = 'There is no next page.',
-  BEARER_TOKEN = 'Bearer '
+  PAGES_ARE_OVER = 'There is no next page.'
 }

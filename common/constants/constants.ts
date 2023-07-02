@@ -2,10 +2,9 @@ const EXPIRES_IN_ONE_WEEK = 60 * 60 * 24 * 7;
 const USER_SCHEMA_NAME = 'User';
 const PRODUCT_SCHEMA_NAME = 'Product';
 const SINGLE_IMAGE = 'image';
-
 const PASSWORD_FIELD = 'password';
 const SALT_ROUNDS = 10;
-
+const BEARER_TOKEN = 'Bearer ';
 const DATABASE_ID_PATH = '_id';
 
 export {
@@ -16,4 +15,5 @@ export {
   PASSWORD_FIELD,
   SALT_ROUNDS,
   DATABASE_ID_PATH,
+  BEARER_TOKEN
 };
