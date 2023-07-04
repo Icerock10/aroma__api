@@ -21,7 +21,7 @@ app.use(ProductsPath.ROOT, productsRouter);
 
 const port: string | number = process.env.PORT || 5000;
 app.get('/', (req, res, next) => {
-  res.send('MAXIMKA MAXIMKA MAXIMKA!')
+  res.send('!!!Forced new deploy!!!!')
   next()
 });
 app.use(apiErrorHandler);
