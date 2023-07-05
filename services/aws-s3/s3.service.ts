@@ -1,5 +1,6 @@
 import { PutObjectCommand, S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { Product, IUser } from '../../common/interfaces/interfaces';
 
 const s3 = new S3Client({
   credentials: {
@@ -15,7 +16,7 @@ class S3Service {
     this._s3_instance = s3;
   }
 
-  async _upload(originalname, buffer, mimetype) {
+  async _upload(originalname: string, buffer: Buffer, mimetype: string) {
     const bucketOptions = {
       Bucket: process.env.BUCKET_NAME,
       Key: originalname,
@@ -26,7 +27,7 @@ class S3Service {
     await this._s3_instance.send(command);
   }
 
-  async _getImages(products) {
+  async _getImages(products: Product[]) {
     for (const product of products) {
       const bucketOptions = {
         Bucket: process.env.BUCKET_NAME,
@@ -38,7 +39,7 @@ class S3Service {
     return products;
   }
 
-  async _getSingleProduct(product) {
+  async _getSingleProduct(product: Product[]) {
     const bucketOptions = {
       Bucket: process.env.BUCKET_NAME,
       Key: product[0].imageName,
@@ -48,7 +49,7 @@ class S3Service {
     return product;
   }
 
-  async _getAvatar(user) {
+  async _getAvatar(user: IUser) {
     const bucketOptions = {
       Bucket: process.env.BUCKET_NAME,
       Key: user.avatar,

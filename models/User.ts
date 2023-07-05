@@ -1,6 +1,8 @@
-import { model, Schema } from "mongoose";
+import { model, Schema } from 'mongoose';
+import { USER_SCHEMA_NAME } from '../common/constants/constants';
+import { IUser } from '../common/interfaces/interfaces';
 
-const userSchema = new Schema({
+const userSchema = new Schema<IUser>({
   name: {
     type: String,
     required: true,
@@ -13,22 +15,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  location: {
-    type: String,
-    required: false,
-  },
-  jobPosition: {
-    type: String,
-    required: false,
-  },
-  avatar: {
-    type: String,
-    required: false,
-  },
-  avatarUrl: {
-    type: String,
-    required: false,
-  },
+  location: String,
+  jobPosition: String,
+  avatar: String,
+  avatarUrl: String,
 });
 
-export const User = model("User", userSchema);
+export const User = model<IUser>(USER_SCHEMA_NAME, userSchema);

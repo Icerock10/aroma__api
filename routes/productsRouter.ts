@@ -1,14 +1,13 @@
 import express from 'express';
-import multer from 'multer';
+import { multerUploadToStorage } from './helpers/create-multer-storage';
 import productController from '../controller/productController';
-import { ProductsPath } from '../common/enums';
+import { ProductRoutes } from '../common/enums/product-routes-enums';
+import { SINGLE_IMAGE } from '../common/constants/constants';
 export const productsRouter = express.Router();
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
 
-productsRouter.route('/').get(productController.getAll);
-productsRouter.route(ProductsPath.GET_MANY).get(productController.getSomePaginatedProducts);
-productsRouter.route(ProductsPath.UPLOAD).post(upload.single('image'), productController.upload);
-productsRouter.route(ProductsPath.GET_ONE).get(productController.getOne);
-productsRouter.route(ProductsPath.GET_MANY_BY_IDS).post(productController.getManyById);
+productsRouter.route(ProductRoutes.ROOT).get(productController.getAll);
+productsRouter.route(ProductRoutes.GET_MANY).get(productController.getSomePaginatedProducts);
+productsRouter.route(ProductRoutes.UPLOAD).post(multerUploadToStorage.single(SINGLE_IMAGE), productController.upload);
+productsRouter.route(ProductRoutes.GET_ONE).get(productController.getOne);
+productsRouter.route(ProductRoutes.GET_MANY_BY_IDS).post(productController.getManyById);

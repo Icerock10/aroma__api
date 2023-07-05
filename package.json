@@ -6,16 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src/**/*.ts",
-    "watch": "tsc -w",
-    "dev": "nodemon -L dist/src/server.js",
+    "dev": "tsx watch src/server.ts",
     "prod": "node dist/src/server.js",
-    "build": "tsc",
-    "dcr-run": "docker run -d -p 5000:5000 --rm icerock10/huy-api:main-4f041ee",
-    "dcr-build": "docker build -t aroma-api .",
-    "dcr-login": "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 796805497988.dkr.ecr.us-east-1.amazonaws.com/aroma-api",
-    "dcr-push": "docker push 796805497988.dkr.ecr.us-east-1.amazonaws.com/aroma-api:latest",
-    "dcr-tag": "docker tag aroma-api:latest 796805497988.dkr.ecr.us-east-1.amazonaws.com/aroma-api:latest",
-    "dcr-update": "aws ecs update-service --cluster aroma-api-ecs --service aroma-service --force-new-deployment --region us-east-1"
+    "build": "rimraf /dist && npx tsc"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +17,8 @@
     "@types/express": "^4.17.17",
     "cors": "^2.8.5",
     "prettier": "2.8.8",
+    "rimraf": "^5.0.1",
+    "tsx": "^3.12.7",
     "typescript": "^5.0.4"
   },
   "dependencies": {
@@ -41,7 +36,6 @@
     "mongoose": "^7.2.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
-    "nodemon": "^2.0.22",
     "ts-node": "^10.9.1"
   }
 }

@@ -1,6 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
+import { EXPIRES_IN_ONE_WEEK } from '../common/constants/constants';
+import { ResponseMessage } from '../common/enums/response-messages-enums';
 import { ErrorService } from './error/error.service';
+import { NextFunction } from 'express';
+import { CustomRequest } from '../common/interfaces/interfaces';
+
 class Jwt {
   private _jwt_instance: typeof jwt;
 
@@ -9,38 +14,36 @@ class Jwt {
   }
 
   generateAccessToken(email: string) {
-    const expiresInOneWeek = 60 * 60 * 24 * 7;
     return this._jwt_instance.sign({ email }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: expiresInOneWeek,
+      expiresIn: EXPIRES_IN_ONE_WEEK,
     });
   }
 
   generateRefreshToken(email: string) {
-    const expiresInOneWeek = 60 * 60 * 24 * 7;
     return this._jwt_instance.sign({ email }, process.env.REFRESH_TOKEN_SECRET, {
-      expiresIn: expiresInOneWeek,
+      expiresIn: EXPIRES_IN_ONE_WEEK,
     });
   }
 
-  verifyRefreshToken(refreshToken, next) {
+  verifyRefreshToken(refreshToken: string, next: NextFunction) {
     return this._jwt_instance.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
-      async (err, decoded) => {
-        if (err) next(ErrorService.unAuthorizedErr('Token is not valid or expired'));
+      async (err: Error, decoded) => {
+        if (err) next(ErrorService.unAuthorizedErr(ResponseMessage.TOKEN_NOT_VALID));
         const foundUser = await User.findOne({ email: decoded.email });
-        if (!foundUser) next(ErrorService.unAuthorizedErr('User was not found'));
+        if (!foundUser) next(ErrorService.unAuthorizedErr(ResponseMessage.USER_NOT_FOUND));
         return this.generateAccessToken(foundUser.email);
       },
     );
   }
 
-  verifyAccessToken(accessToken, next, req) {
+  verifyAccessToken(accessToken: string, next: NextFunction, req: CustomRequest) {
     return this._jwt_instance.verify(
       accessToken,
       process.env.ACCESS_TOKEN_SECRET,
       (err, decoded) => {
-        if (err) next(ErrorService.forbiddenError('You were logged out'));
+        if (err) next(ErrorService.forbiddenError(ResponseMessage.LOGGED_OUT));
         req.email = decoded.email;
         next();
       },

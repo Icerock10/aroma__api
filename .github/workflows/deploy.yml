@@ -1,9 +1,7 @@
-name: Deploy to AWS
+name: Build and Deploy
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -38,17 +36,16 @@ jobs:
         run: npm ci
       - name: Build Project
         run: npm run build
-      - name: Configure AWS credentials
+      - name: Login to AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: Deploy to AWS
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Deploy to AWS-ECR
         run: |
-            npm run dcr-build
-            npm run dcr-login
-            npm run dcr-tag
-            npm run dcr-push
-            npm run dcr-update
-            
+          docker build -t aroma-api .
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URL }}
+          docker tag aroma-api:latest ${{ secrets.AWS_ECR_URL }}:latest
+          docker push ${{ secrets.AWS_ECR_URL }}:latest
+          aws ecs update-service --cluster ${{ secrets.AWS_CLUSTER_NAME }} --service ${{ secrets.AWS_SERVICE_NAME }} --force-new-deployment --region ${{ secrets.AWS_REGION }}
