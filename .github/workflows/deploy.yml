@@ -36,20 +36,6 @@ jobs:
         run: npm ci
       - name: Build Project
         run: npm run build
-      - name: Upload build files
-        uses: actions/upload-artifact@v2
-        with:
-          name: production-files
-          path: ./dist
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Download build files
-        uses: actions/download-artifact@v2
-        with:
-          name: production-files
-          path: ./dist
       - name: Login to AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -58,8 +44,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy to AWS-ECR
         run: |
-          ls -la ./dist
-          docker build -t aroma-api ./dist
+          docker build -t aroma-api .
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URL }}
           docker tag aroma-api:latest ${{ secrets.AWS_ECR_URL }}:latest
           docker push ${{ secrets.AWS_ECR_URL }}:latest

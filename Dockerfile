@@ -6,7 +6,7 @@ COPY package.json package-lock.json ./
 
 RUN npm ci --only=production
 
-COPY . .
+COPY ./dist ./dist
 
 EXPOSE 3000
 
