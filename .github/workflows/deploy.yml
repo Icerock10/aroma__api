@@ -58,6 +58,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy to AWS-ECR
         run: |
+          ls -la ./dist
           docker build -t aroma-api ./dist
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URL }}
           docker tag aroma-api:latest ${{ secrets.AWS_ECR_URL }}:latest
