@@ -50,3 +50,16 @@ jobs:
         with:
           name: production-files
           path: ./dist
+      - name: Login to AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Deploy to AWS-ECR
+        run: |
+          run docker build -t aroma-api ./dist
+          run aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URL }}
+          run docker tag aroma-api:latest ${{ secrets.AWS_ECR_URL }}:latest
+          run docker push ${{ secrets.AWS_ECR_URL }}:latest
+          run aws ecs update-service --cluster ${{ secrets.AWS_CLUSTER_NAME }} --service ${{ secrets.AWS_SERVICE_NAME }} --force-new-deployment --region ${{ secrets.AWS_REGION }}
