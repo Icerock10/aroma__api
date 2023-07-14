@@ -24,6 +24,7 @@ interface Product extends Document {
   productProfile: string;
   burnTime?: number;
   indication: string;
+  capacity?: string
 }
 
 interface IUser extends Document {

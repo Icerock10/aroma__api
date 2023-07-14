@@ -5,5 +5,8 @@ export enum UserRoutes {
   TOKEN_REFRESH = '/refresh',
   DASHBOARD = '/dashboard',
   UPLOAD_AVATAR = '/upload',
-  UPDATE_ONE = '/update'
+  UPDATE_ONE = '/update',
+  GOOGLE_AUTH = '/auth/google',
+  GOOGLE_AUTH_CALLBACK = '/auth/google/callback',
+  GOOGLE_PROTECTED = '/auth/protected'
 }

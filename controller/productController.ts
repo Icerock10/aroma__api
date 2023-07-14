@@ -13,7 +13,7 @@ class productController {
   upload = asyncHandler(async (req: CustomRequest, res: Response, next: NextFunction) => {
     if (!req.file || !req.body)
       return next(ErrorService.badRequestErr(ResponseMessage.FILE_OR_PRODUCT_NOT_UPLOADED));
-    const { category, title, subTitle, description, price, productProfile, burnTime, indication } =
+    const { category, title, subTitle, description, price, productProfile, burnTime, indication, capacity } =
       req.body;
     const { originalname, mimetype, buffer } = req.file;
 
@@ -32,6 +32,7 @@ class productController {
       productProfile,
       burnTime,
       indication,
+      capacity
     });
     res.json(product);
   });

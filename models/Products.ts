@@ -39,6 +39,10 @@ const productSchema = new Schema<Product>({
     type: String,
     required: true,
   },
+  capacity: {
+    type: String,
+    required: false,
+  },
   burnTime: Number
 });
 

@@ -1,5 +1,6 @@
 import { User } from '../models/User';
 import { NextFunction, Request, Response } from 'express';
+import passport from 'passport';
 import { CustomRequest, IUser } from '../common/interfaces/interfaces';
 import { ResponseMessage } from '../common/enums/response-messages-enums';
 import { PASSWORD_FIELD, SALT_ROUNDS } from '../common/constants/constants';
@@ -8,6 +9,8 @@ import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcrypt';
 import { ErrorService } from '../services/error/error.service';
 import S3Service from '../services/aws-s3/s3.service';
+import { GOOGLE } from '../common/enums/google-auth-enums';
+
 class userController {
   createUser = asyncHandler(
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -95,6 +98,19 @@ class userController {
       res.json(updatedUser);
     },
   );
+  googleAuth = asyncHandler(async (req, res, next) => {
+    passport.authenticate(GOOGLE.PASSPORT_STRATEGY, {
+      scope: [GOOGLE.PASSPORT_SCOPE_EMAIL, GOOGLE.PASSPORT_SCOPE_PROFILE],
+    })(req, res, next);
+  });
+  googleAuthCallback = (req, res, next) => {
+    passport.authenticate(GOOGLE.PASSPORT_STRATEGY, { session: false }, (err, token) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect(`${process.env.CLIENT_URL}${token}`);
+    })(req, res, next);
+  };
 }
 
 export default new userController();
