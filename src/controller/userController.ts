@@ -30,8 +30,8 @@ class userController {
       res.json({ user, message: ResponseMessage.ACCOUNT_CREATED, accessToken, refreshToken });
     },
   );
-  login = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const { email, password }: IUser = req.body;
+  login = asyncHandler(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { email, password } = req.body;
 
     if (!email || !password) next(ErrorService.badRequestErr(ResponseMessage.FIELDS_REQUIRED));
 

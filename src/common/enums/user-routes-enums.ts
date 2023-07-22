@@ -8,5 +8,4 @@ export enum UserRoutes {
   UPDATE_ONE = '/update',
   GOOGLE_AUTH = '/auth/google',
   GOOGLE_AUTH_CALLBACK = '/auth/google/callback',
-  GOOGLE_PROTECTED = '/auth/protected'
 }

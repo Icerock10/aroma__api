@@ -3,7 +3,6 @@ import asyncHandler from 'express-async-handler';
 import { ErrorService } from '../services/error/error.service';
 import { Product } from '../common/interfaces/interfaces';
 import S3Service from '../services/aws-s3/s3.service';
-import { getPaginatedResults } from './helpers/paginated-results';
 import { ResponseMessage } from '../common/enums/response-messages-enums';
 import { NextFunction, Request, Response } from 'express';
 import { CustomRequest } from '../common/interfaces/interfaces';
@@ -13,8 +12,17 @@ class productController {
   upload = asyncHandler(async (req: CustomRequest, res: Response, next: NextFunction) => {
     if (!req.file || !req.body)
       return next(ErrorService.badRequestErr(ResponseMessage.FILE_OR_PRODUCT_NOT_UPLOADED));
-    const { category, title, subTitle, description, price, productProfile, burnTime, indication, capacity } =
-      req.body;
+    const {
+      category,
+      title,
+      subTitle,
+      description,
+      price,
+      productProfile,
+      burnTime,
+      indication,
+      capacity,
+    } = req.body;
     const { originalname, mimetype, buffer } = req.file;
 
     const isDuplicate = await Products.findOne({ imageName: originalname });
@@ -32,7 +40,7 @@ class productController {
       productProfile,
       burnTime,
       indication,
-      capacity
+      capacity,
     });
     res.json(product);
   });
@@ -44,29 +52,30 @@ class productController {
   getSomePaginatedProducts = asyncHandler(
     async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       const { category, page, limit } = req.query;
-      const products: Product[] = !category
-        ? await Products.find({})
-        : await Products.find({ category });
-      if (!products.length)
-        next(ErrorService.badRequestErr(ResponseMessage.PRODUCT_CATEGORY_INVALID));
-
-      const { paginatedProducts, pageNumber, totalPages, endIndex } = getPaginatedResults(
-        page,
-        limit,
-        products,
-      );
+      const pageNumber = parseInt(page as string) || 1;
+      const limitNumber = parseInt(limit as string) || 6;
+      
+      const query = category ? { category } : {};
+      
+      const totalCount = await Products.countDocuments(query);
+      const startIndex = (pageNumber - 1) * limitNumber;
+      const totalPages = Math.ceil(totalCount / limitNumber);
+      const paginatedProducts = await Products.find(query).skip(startIndex).limit(limitNumber);
+      
+      if (!paginatedProducts.length)
+        return next(ErrorService.badRequestErr(ResponseMessage.PRODUCT_CATEGORY_INVALID));
       if (!category && Number(page) > totalPages)
-        next(ErrorService.badRequestErr(ResponseMessage.PAGES_ARE_OVER));
+        return next(ErrorService.badRequestErr(ResponseMessage.PAGES_ARE_OVER));
+
       const paginatedProductsWithImages: Product[] = await S3Service._getImages(paginatedProducts);
 
       if (!paginatedProductsWithImages.length)
-        next(ErrorService.internalErr(ResponseMessage.AWS_BUCKET_ISSUES));
+        return next(ErrorService.internalErr(ResponseMessage.AWS_BUCKET_ISSUES));
       const response = {
         paginatedProductsWithImages,
         pageNumber,
         totalPages,
-        endIndex,
-        limit,
+        limitNumber,
       };
       res.json(response);
     },

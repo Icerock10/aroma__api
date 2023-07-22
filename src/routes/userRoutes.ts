@@ -1,5 +1,5 @@
 import express from 'express';
-import { multerUploadToStorage } from './helpers/create-multer-storage';
+import { multerUploadToStorage } from '../common/helpers/create-multer-storage';
 import userController from '../controller/userController';
 import { SINGLE_IMAGE } from '../common/constants/constants';
 import { UserRoutes } from '../common/enums/user-routes-enums';

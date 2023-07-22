@@ -1,13 +1,14 @@
 import { ErrorService } from '../services/error/error.service';
 import { ResponseMessage } from '../common/enums/response-messages-enums';
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
+import { ErrorCodes } from '../common/enums/server-error-codes-enums';
 
-function apiErrorHandler(err: ErrorService, req: Request, res: Response, next: NextFunction) {
+function apiErrorHandler(err: ErrorService, req: Request, res: Response) {
   if (err instanceof ErrorService) {
     res.status(err.code).json({ message: err.message });
     return;
   }
-  res.status(500).json(ResponseMessage.SOMETHING_WENT_WRONG);
+  res.status(ErrorCodes.SERVER_ERROR).json(ResponseMessage.SOMETHING_WENT_WRONG);
 }
 
 export { apiErrorHandler };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { multerUploadToStorage } from './helpers/create-multer-storage';
+import { multerUploadToStorage } from '../common/helpers/create-multer-storage';
 import productController from '../controller/productController';
 import { ProductRoutes } from '../common/enums/product-routes-enums';
 import { SINGLE_IMAGE } from '../common/constants/constants';
