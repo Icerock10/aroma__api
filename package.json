@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src/**/*.ts",
     "dev": "nodemon src/server.ts",
-    "prod": "node dist/src/server.js",
+    "prod": "node dist/server.js",
     "build": "rimraf /dist && npx tsc"
   },
   "keywords": [],
